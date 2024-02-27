@@ -1,0 +1,168 @@
+<!-- @format -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .heading {
+        text-align: center;
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: bold;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      }
+
+      form {
+        margin-bottom: 20px;
+      }
+
+      label {
+        font-weight: bold;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      button {
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #007bff;
+        color: white;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      .short-url-container {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+      }
+
+      .short-url-container input[type="text"] {
+        flex: 1;
+        margin-right: 10px;
+      }
+
+      .short-url-container button {
+        padding: 6px 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="heading">URL Shortener</h1>
+      <% if (locals.id) { %>
+      <div class="short-url-container">
+        <input
+          type="text"
+          id="shortUrlInput"
+          value="http://localhost:5000/api/urlShortner/<%=id %>"
+          readonly
+        />
+        <button onclick="copyUrl()">Copy URL</button>
+      </div>
+      <% } %>
+      <div>
+        <form id="urlForm" method="post" action="/api/urlShortner">
+          <label for="urlInput">Enter the URL to shorten</label><br />
+          <input
+            type="text"
+            id="urlInput"
+            name="url"
+            placeholder="Enter the URL here"
+          /><br />
+          <button type="submit">Generate</button>
+        </form>
+      </div>
+      <div>
+        <% if (locals.urls) { %>
+        <table>
+          <thead>
+            <tr>
+              <th>Sr. no</th>
+              <th>Short ID</th>
+              <th>Original URL</th>
+              <th>Number of Clicks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% urls.forEach((url, index) => { %>
+            <tr>
+              <td><%=index + 1%></td>
+              <td><%= url.shortId %></td>
+              <td><%= url.redirectUrl %></td>
+              <td><%= url.visitHistory.length %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <% } %>
+      </div>
+    </div>
+
+    <script>
+      function copyUrl() {
+        const shortUrlInput = document.getElementById("shortUrlInput");
+        shortUrlInput.select();
+        document.execCommand("copy");
+        alert("URL copied to clipboard");
+      }
+    </script>
+  </body>
+</html>
