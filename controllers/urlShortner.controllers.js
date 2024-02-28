@@ -2,19 +2,26 @@
 
 const urlData = require("../models/urlShortner.models");
 const ShortUniqueId = require("short-unique-id");
-const uid = new ShortUniqueId({ length: 10 });
+const { getUser } = require("../service/auth.service");
+const shortuid = new ShortUniqueId({ length: 8 });
 
 async function handleGenerateShortId(req, res) {
-  let id = uid.rnd();
+  let id = shortuid.rnd();
+  let uid = req.cookies.uid;
+  const user = getUser(uid);
+  const urls = await urlData.find({ createdBy: user._id });
   let body = req.body;
+
   if (!body.url) {
     return res.status(400).json({ msg: "url required" });
   }
 
   let isUrlExist = await urlData.findOne({ redirectUrl: body.url });
+
   if (isUrlExist) {
     return res.render("home", {
       id: isUrlExist.shortId,
+      urls,
     });
   }
 
@@ -22,9 +29,12 @@ async function handleGenerateShortId(req, res) {
     shortId: id,
     redirectUrl: body.url,
     visitHistory: [],
+    createdBy: user._id,
   });
+
   res.render("home", {
     id,
+    urls,
   });
 }
 

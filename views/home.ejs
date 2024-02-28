@@ -12,7 +12,25 @@
         padding: 0;
         background-color: #f0f0f0;
       }
+      .top-menu {
+        display: flex;
+        flex-direction: row;
+        justify-content: right;
+      }
+      a {
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        margin-left: 10px;
+      }
 
+      a:hover {
+        background-color: #0056b3;
+      }
       .container {
         max-width: 800px;
         margin: 20px auto;
@@ -106,20 +124,24 @@
   </head>
   <body>
     <div class="container">
+      <div class="top-menu">
+        <a href="/login">Login</a>
+        <a href="/signup">Sign Up</a>
+      </div>
       <h1 class="heading">URL Shortener</h1>
       <% if (locals.id) { %>
       <div class="short-url-container">
         <input
           type="text"
           id="shortUrlInput"
-          value="http://localhost:5000/api/urlShortner/<%=id %>"
+          value="http://localhost:5000/urlShortner/<%=id %>"
           readonly
         />
         <button onclick="copyUrl()">Copy URL</button>
       </div>
       <% } %>
       <div>
-        <form id="urlForm" method="post" action="/api/urlShortner">
+        <form id="urlForm" method="post" action="/urlShortner">
           <label for="urlInput">Enter the URL to shorten</label><br />
           <input
             type="text"
