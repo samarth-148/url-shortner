@@ -8,14 +8,17 @@ const { getUser } = require("../service/auth.service");
 router.route("/").get(async (req, res) => {
   const uid = req.cookies.uid;
   const user = getUser(uid);
+  let loggedIn = false;
   let urls;
 
   if (user) {
     urls = await urlData.find({ createdBy: user._id });
+    loggedIn = true;
   }
 
   res.render("home", {
     urls,
+    loggedIn,
   });
 });
 

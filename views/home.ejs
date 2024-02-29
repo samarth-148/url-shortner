@@ -81,25 +81,13 @@
         background-color: #0056b3;
       }
 
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-
-      th,
-      td {
-        padding: 8px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-      }
-
-      th {
-        background-color: #007bff;
-        color: white;
-      }
-
       tbody tr:nth-child(even) {
         background-color: #f2f2f2;
+      }
+
+      .originalUrl {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
       }
 
       .short-url-container {
@@ -120,14 +108,39 @@
       .short-url-container button {
         padding: 6px 12px;
       }
+
+      /* Added styling for the table */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        max-width: 300px;
+        word-wrap: break-word;
+      }
+
+      th {
+        background-color: #007bff;
+        color: white;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="top-menu">
+        <% if (!locals.loggedIn) { %>
         <a href="/login">Login</a>
         <a href="/signup">Sign Up</a>
+        <% } else { %>
+        <a href="/user/logout">Logout</a>
+        <% } %>
       </div>
+
       <h1 class="heading">URL Shortener</h1>
       <% if (locals.id) { %>
       <div class="short-url-container">
@@ -159,7 +172,7 @@
             <tr>
               <th>Sr. no</th>
               <th>Short ID</th>
-              <th>Original URL</th>
+              <th class="originalUrl">Original URL</th>
               <th>Number of Clicks</th>
             </tr>
           </thead>
