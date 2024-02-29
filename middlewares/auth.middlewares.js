@@ -1,18 +1,18 @@
 /** @format */
 
-const { getUser } = require("../service/auth.service");
+const { getUserId } = require("../service/auth.service");
 
 async function authenticateUserByCookie(req, res, next) {
-  const uid = req.cookies.uid;
+  const token = req.cookies.uid;
 
-  if (!uid) {
+  if (!token) {
     return res.send(
       `<script>alert('Login required'); window.history.back();</script>`
     );
   }
 
-  const user = getUser(uid);
-  if (!user) {
+  const userId = getUserId(token);
+  if (!userId) {
     return res.send(
       `<script>alert('Login required'); window.history.back();</script>`
     );

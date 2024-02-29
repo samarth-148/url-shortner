@@ -2,14 +2,14 @@
 
 const urlData = require("../models/urlShortner.models");
 const ShortUniqueId = require("short-unique-id");
-const { getUser } = require("../service/auth.service");
+const { getUserId } = require("../service/auth.service");
 const shortuid = new ShortUniqueId({ length: 8 });
 
 async function handleGenerateShortId(req, res) {
   let id = shortuid.rnd();
   let uid = req.cookies.uid;
-  const user = getUser(uid);
-  const urls = await urlData.find({ createdBy: user._id });
+  const userId = getUserId(uid);
+  const urls = await urlData.find({ createdBy: userId });
   let body = req.body;
 
   if (!body.url) {

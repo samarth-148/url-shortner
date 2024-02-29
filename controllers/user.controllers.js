@@ -1,7 +1,5 @@
 /** @format */
 const User = require("../models/user.models");
-const ShortUniqueId = require("short-unique-id");
-const uid = new ShortUniqueId({ length: 16 });
 const { setUser } = require("../service/auth.service");
 
 async function handleSignUp(req, res) {
@@ -14,9 +12,8 @@ async function handleSignUp(req, res) {
     password,
   });
 
-  const sessionID = uid.rnd();
-  setUser(sessionID, user);
-  res.cookie("uid", sessionID);
+  const token = setUser(user);
+  res.cookie("uid", token);
 
   return res.redirect("/");
 }
@@ -26,11 +23,12 @@ async function handleLogin(req, res) {
   const user = await User.findOne({ email, password });
 
   if (!user) {
-    return res.redirect("/login");
+    return res.send(
+      `<script>alert('Wrong credentials! Please enter correct details.'); window.history.back();</script>`
+    );
   }
-  const sessionID = uid.rnd();
-  setUser(sessionID, user);
-  res.cookie("uid", sessionID);
+  const token = setUser(user);
+  res.cookie("uid", token);
   return res.redirect("/");
 }
 async function handleLogOut(req, res) {

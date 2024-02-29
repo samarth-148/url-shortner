@@ -3,16 +3,17 @@
 const express = require("express");
 const router = express.Router();
 const urlData = require("../models/urlShortner.models");
-const { getUser } = require("../service/auth.service");
+const { getUserId } = require("../service/auth.service");
 
 router.route("/").get(async (req, res) => {
   const uid = req.cookies.uid;
-  const user = getUser(uid);
+  const userId = getUserId(uid);
   let loggedIn = false;
   let urls;
 
-  if (user) {
-    urls = await urlData.find({ createdBy: user._id });
+  if (userId) {
+    console.log("dcnd");
+    urls = await urlData.find({ createdBy: userId });
     loggedIn = true;
   }
 
